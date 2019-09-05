@@ -1,0 +1,11 @@
+endOfLine: lf
+proseWrap: always
+singleQuote: true
+tabWidth: 4
+trailingComma: es5
+overrides:
+  - files: "*.spec.ts"
+    options:
+      # Since the tests contain a lot of inline Lua,
+      # the higher width generates cleaner code
+      printWidth: 120

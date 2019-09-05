@@ -1,0 +1,16 @@
+# Ignore everything by default
+*
+
+# Enable for top-level files and our source code
+!/*
+!/src/**/*
+
+# Ignore files that don't currently have formatters
+.*
+interface.lua
+license
+
+# Ignore the npm files because it will format
+# them regardless of what we choose to do
+package.json
+package-lock.json

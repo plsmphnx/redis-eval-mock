@@ -1,0 +1,83 @@
+{
+  "name": "redis-eval-mock",
+  "version": "1.0.0",
+  "description": "A mock version of Redis EVAL to test Lua scripts",
+  "keywords": [
+    "redis",
+    "lua",
+    "eval",
+    "mock",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plsmphnx/redis-eval-mock.git"
+  },
+  "author": "Microsoft",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "interface.lua",
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "!lib/**/*.spec.*"
+  ],
+  "dependencies": {
+    "deasync": "^0.1.15",
+    "lua.vm.js": "^0.0.1",
+    "msgpack5": "^4.2.1"
+  },
+  "peerDependencies": {
+    "@types/redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "@princjef/tslint-config": "^2.0.0",
+    "@types/deasync": "^0.1.0",
+    "@types/jest": "^24.0.18",
+    "@types/msgpack5": "^3.4.1",
+    "@types/node": "^8.10.53",
+    "@types/redis": "^2.8.13",
+    "@types/redis-mock": "^0.17.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "redis-evalsha": "^1.1.1",
+    "redis-mock": "^0.46.0",
+    "tslint": "^5.19.0",
+    "typescript": "^3.6.2"
+  },
+  "scripts": {
+    "lint": "tslint --project tsconfig.json --fix",
+    "lint:verify": "tslint --project tsconfig.json",
+    "format": "prettier --write \"**/*\"",
+    "format:verify": "prettier --check \"**/*\"",
+    "prebuild": "npm run lint && npm run format",
+    "prebuild:verify": "npm run lint:verify && npm run format:verify",
+    "build": "tsc",
+    "build:verify": "tsc",
+    "pretest": "npm run build",
+    "pretest:verify": "npm run build:verify",
+    "test": "jest",
+    "test:verify": "jest",
+    "prepublishOnly": "npm run test:verify"
+  },
+  "jest": {
+    "roots": [
+      "lib"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text",
+      "json",
+      "html"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    }
+  }
+}
