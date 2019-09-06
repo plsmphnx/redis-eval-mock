@@ -69,11 +69,6 @@
       "lib"
     ],
     "collectCoverage": true,
-    "coverageReporters": [
-      "text",
-      "json",
-      "html"
-    ],
     "coverageThreshold": {
       "global": {
         "branches": 80,

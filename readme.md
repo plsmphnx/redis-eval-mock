@@ -1,5 +1,9 @@
 # redis-eval-mock
 
+[![Travis CI build status](https://travis-ci.org/plsmphnx/redis-eval-mock.svg?branch=master)](https://travis-ci.org/plsmphnx/redis-eval-mock)
+[![codecov](https://codecov.io/gh/plsmphnx/redis-eval-mock/branch/master/graph/badge.svg)](https://codecov.io/gh/plsmphnx/redis-eval-mock)
+[![npm version](https://img.shields.io/npm/v/redis-eval-mock.svg)](https://npmjs.org/package/redis-eval-mock)
+
 Provides a mock of the `EVAL` functionality in Redis using `lua.vm.js` in order
 to test Lua scripts. It is intended to be used along with an existing mock of
 the `redis` library, and calls back into it for Redis calls executed from Lua.
