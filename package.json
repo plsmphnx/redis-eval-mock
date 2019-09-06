@@ -39,8 +39,10 @@
     "@types/node": "^8.10.53",
     "@types/redis": "^2.8.13",
     "@types/redis-mock": "^0.17.0",
+    "codecov": "^3.5.0",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "pubcop": "^1.0.0",
     "redis-evalsha": "^1.1.1",
     "redis-mock": "^0.46.0",
     "tslint": "^5.19.0",
@@ -59,7 +61,8 @@
     "pretest:verify": "npm run build:verify",
     "test": "jest",
     "test:verify": "jest",
-    "prepublishOnly": "npm run test:verify"
+    "prepublishOnly": "npm run test:verify && pubcop --checks tag branch",
+    "coverage": "codecov"
   },
   "jest": {
     "roots": [
