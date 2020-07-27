@@ -1,8 +1,7 @@
-endOfLine: lf
+arrowParens: avoid
 proseWrap: always
 singleQuote: true
 tabWidth: 4
-trailingComma: es5
 overrides:
   - files: "*.spec.ts"
     options:

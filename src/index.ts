@@ -14,7 +14,7 @@ import * as Redis from './utility/redis';
 
 const EVAL = Symbol();
 
-export default function<T extends Partial<RedisClient>>(client: T): T {
+export default function <T extends Partial<RedisClient>>(client: T): T {
     // If we've already mocked this client, just return it
     if (client[EVAL]) {
         return client;
