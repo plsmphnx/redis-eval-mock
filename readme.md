@@ -4,11 +4,16 @@
 [![codecov](https://codecov.io/gh/plsmphnx/redis-eval-mock/branch/master/graph/badge.svg)](https://codecov.io/gh/plsmphnx/redis-eval-mock)
 [![npm version](https://img.shields.io/npm/v/redis-eval-mock.svg)](https://npmjs.org/package/redis-eval-mock)
 
-Provides a mock of the `EVAL` functionality in Redis using `lua.vm.js` in order
-to test Lua scripts. It is intended to be used along with an existing mock of
-the `redis` library, and calls back into it for Redis calls executed from Lua.
-In addition, it provides mocks of the `cjson` and `cmsgpack` libraries provided
-by default to Lua by Redis.
+Provides a mock of the `EVAL` functionality in Redis using
+[`wasmoon`](https://github.com/ceifa/wasmoon) in order to test Lua scripts. It
+is intended to be used along with an existing mock of the `redis` library, and
+calls back into it for Redis calls executed from Lua. In addition, it provides
+mocks of the `cjson` and `cmsgpack` libraries provided by default to Lua by
+Redis.
+
+## Requirements
+
+-   Node.JS 14.6.0 or higher.
 
 ## API
 
@@ -26,7 +31,8 @@ import * as mock from 'redis-mock';
 
 import mockEval from 'redis-eval-mock';
 
-spyOn(redis, 'createClient').and.callFake(() => mockEval(mock.createClient()));
+const client = await mockEval(mock.createClient());
+jest.spyOn(redis, 'createClient').mockReturnValue(client);
 ```
 
 ## Contributing

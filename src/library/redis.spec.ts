@@ -14,14 +14,14 @@ describe('redis', () => {
     let client: RedisClient;
     let doEval: (script: string, keys: number, ...args: any[]) => Promise<any>;
 
-    beforeEach(() => {
-        client = mockEval(redis.createClient());
+    beforeEach(async () => {
+        client = await mockEval(redis.createClient());
         doEval = util.promisify(client.eval.bind(client));
     });
 
     it('calls into the underlying library for commands', async () => {
-        spyOn(client, 'set').and.callThrough();
-        spyOn(client, 'get').and.callThrough();
+        jest.spyOn(client, 'set');
+        jest.spyOn(client, 'get');
 
         const key = 'key';
         expect(await doEval('return redis.call("set", KEYS[1], "4.5")', 1, key)).toBe('OK');

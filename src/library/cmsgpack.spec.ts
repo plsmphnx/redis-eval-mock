@@ -14,15 +14,15 @@ describe('cmsgpack', () => {
     let client: RedisClient;
     let doEval: (script: string, keys: number, ...args: any[]) => Promise<any>;
 
-    beforeEach(() => {
-        client = mockEval(redis.createClient());
+    beforeEach(async () => {
+        client = await mockEval(redis.createClient());
         doEval = util.promisify(client.eval.bind(client));
     });
 
     it('packs multiple arguments and unpacks multiple returns', async () => {
         const args = [1, 'two', false];
 
-        const packed = await doEval('return cmsgpack.pack(unpack(ARGV))', 0, ...args);
+        const packed = await doEval('return cmsgpack.pack(table.unpack(ARGV))', 0, ...args);
         expect(typeof packed).toBe('string');
 
         const unpacked = await doEval('return { cmsgpack.unpack(ARGV[1]) }', 0, packed);

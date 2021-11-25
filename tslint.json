@@ -12,6 +12,12 @@
         "naming-convention": false,
 
         // Required for the mocked redis package
-        "no-implicit-dependencies": false
+        "no-implicit-dependencies": false,
+
+        // Simpler wrapper class definitions
+        "no-parameter-properties": false,
+
+        // False positives
+        "no-with-statement": false
     }
 }

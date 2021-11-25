@@ -6,35 +6,37 @@
 import * as deasync from 'deasync';
 import { RedisClient } from 'redis';
 
-import { nil } from '../utility/lua';
-
 // https://redis.io/commands/eval
+export default class {
+    constructor(private readonly $: RedisClient) {}
 
-// TODO: Reject Redis random commands prior to calling this
-export function replicate_commands(this: RedisClient) {
-    return true;
-}
-
-export function call(this: RedisClient, cmd: string, ...args: any[]) {
-    // The Lua VM can only handle synchronous calls, so we need to force the
-    // Redis library (which may be using process ticks to simulate actual
-    // network calls) to execute syncronously
-    const result = deasync(this[cmd.toLowerCase()].bind(this))(...args);
-    return result != null ? result : nil;
-}
-
-export function pcall(this: RedisClient, cmd: string, ...args: any[]) {
-    try {
-        return call.call(this, cmd, ...args);
-    } catch (err) {
-        return error_reply.call(this, String(err));
+    // TODO: Reject Redis random commands prior to calling this
+    replicate_commands() {
+        return true;
     }
-}
 
-export function error_reply(this: RedisClient, err: string) {
-    return { err };
-}
+    call(cmd: string, ...args: any[]) {
+        // The Lua VM can only handle synchronous calls, so we need to force the
+        // Redis library (which may be using process ticks to simulate actual
+        // network calls) to execute syncronously
+        const command: any = deasync(this.$[cmd.toLowerCase()].bind(this.$));
+        const res = command(...args);
+        return res != null ? res : null;
+    }
 
-export function status_reply(this: RedisClient, ok: string) {
-    return { ok };
+    pcall(cmd: string, ...args: any[]) {
+        try {
+            return this.call(cmd, ...args);
+        } catch (err) {
+            return this.error_reply(String(err));
+        }
+    }
+
+    error_reply(err: string) {
+        return { err };
+    }
+
+    status_reply(ok: string) {
+        return { ok };
+    }
 }

@@ -16,8 +16,8 @@ describe('index', () => {
     let scripts: any;
     let doExec: (script: string, keys: string[], args: any[]) => Promise<any>;
 
-    beforeEach(() => {
-        client = mockEval(redis.createClient());
+    beforeEach(async () => {
+        client = await mockEval(redis.createClient());
         scripts = new evalsha(client);
         doExec = util.promisify(scripts.exec.bind(scripts));
     });
@@ -29,7 +29,7 @@ describe('index', () => {
 
     it('handles secondary cases', async () => {
         scripts.add('empty', 'return nil');
-        expect(mockEval(client)).toBe(client);
+        expect(await mockEval(client)).toBe(client);
         expect(() => scripts.exec('empty', [], [])).not.toThrow();
     });
 });

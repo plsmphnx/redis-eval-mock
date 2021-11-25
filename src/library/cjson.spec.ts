@@ -14,8 +14,8 @@ describe('cjson', () => {
     let client: RedisClient;
     let doEval: (script: string, keys: number, ...args: any[]) => Promise<any>;
 
-    beforeEach(() => {
-        client = mockEval(redis.createClient());
+    beforeEach(async () => {
+        client = await mockEval(redis.createClient());
         doEval = util.promisify(client.eval.bind(client));
     });
 

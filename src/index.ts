@@ -5,16 +5,18 @@
 
 import * as msgpack from 'msgpack5';
 import { Callback, RedisClient } from 'redis';
+import { LuaFactory } from 'wasmoon';
 
-import * as cjson from './library/cjson';
-import * as cmsgpack from './library/cmsgpack';
-import * as redis from './library/redis';
-import * as Lua from './utility/lua';
+import cjson from './library/cjson';
+import cmsgpack from './library/cmsgpack';
+import redis from './library/redis';
 import * as Redis from './utility/redis';
 
 const EVAL = Symbol();
 
-export default function <T extends Partial<RedisClient>>(client: T): T {
+export default async function <T extends Partial<RedisClient>>(
+    client: T
+): Promise<T> {
     // If we've already mocked this client, just return it
     if (client[EVAL]) {
         return client;
@@ -22,35 +24,36 @@ export default function <T extends Partial<RedisClient>>(client: T): T {
 
     const send_command =
         client.send_command && client.send_command.bind(client);
-    const lua = new Lua.VM();
+    const lua = await new LuaFactory().createEngine();
 
     // Mock the libraries provided by Redis
-    lua.set('redis', client, redis);
-    lua.set('cjson', JSON, cjson);
-    lua.set('cmsgpack', msgpack(), cmsgpack);
+    lua.global.set('redis', new redis(client as any));
+    lua.global.set('cjson', new cjson(JSON));
+    lua.global.set('cmsgpack', new cmsgpack(msgpack()));
 
     client[EVAL] = {
         // There is no script cache, so always return NOSCRIPT
         evalsha(...input: any[]) {
-            Redis.callback(Redis.argument(input))(new Error('NOSCRIPT'), null);
+            Redis.callback(Redis.argument(input))(Error('NOSCRIPT'), null);
         },
 
-        // Use lua.vm.js to evaluate the provided script
+        // Use the Lua engine to evaluate the provided script
         eval(...input: any[]) {
             const args = Redis.argument(input);
             const cb = Redis.callback(args);
-            try {
+            (async () => {
                 const script = String(args.shift());
                 const count = parseInt(args.shift(), 10);
 
                 // Redis passes all arguments as strings
-                lua.set('KEYS', args.slice(0, count).map(String));
-                lua.set('ARGV', args.slice(count).map(String));
+                lua.global.set('KEYS', args.slice(0, count).map(String));
+                lua.global.set('ARGV', args.slice(count).map(String));
 
-                cb(null, Redis.response(lua.run(script)[0]));
-            } catch (err) {
-                cb(err, null);
-            }
+                return Redis.response(await lua.doString(script));
+            })().then(
+                res => cb(null, res),
+                err => cb(err, null)
+            );
         },
 
         // Ensure eval commands are sent to the new methods

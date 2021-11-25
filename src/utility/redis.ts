@@ -32,7 +32,7 @@ export function response(value: any): any {
             }
             if (value) {
                 if (typeof value.err === 'string') {
-                    throw new Error(value.err);
+                    throw Error(value.err);
                 }
                 if (typeof value.ok === 'string') {
                     return value.ok;

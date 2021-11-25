@@ -4,8 +4,31 @@
  */
 
 import { MessagePack } from 'msgpack5';
+import { LuaMultiReturn } from 'wasmoon';
 
-import { returns } from '../utility/lua';
+// https://github.com/antirez/lua-cmsgpack
+export default class {
+    constructor(private readonly $: MessagePack) {}
+
+    pack(...args: any[]) {
+        return mp_pack(this.$, args);
+    }
+
+    unpack(msgpack: string) {
+        const results = mp_unpack_full(this.$, msgpack, 0, 0);
+        return LuaMultiReturn.from(results.slice(1));
+    }
+
+    unpack_one(msgpack: string, offset = 0) {
+        const results = mp_unpack_full(this.$, msgpack, 1, offset);
+        return LuaMultiReturn.from(results.slice(0, 2));
+    }
+
+    unpack_limit(msgpack: string, limit: number, offset = 0) {
+        const results = mp_unpack_full(this.$, msgpack, limit, offset);
+        return LuaMultiReturn.from(results);
+    }
+}
 
 // The Lua-to-JS string translation appears to truncate at nulls,
 // so use the safe base64 rather than the more accurate binary
@@ -31,30 +54,4 @@ function mp_unpack_full(
     const end = Math.min(offset + (limit || Infinity), results.length);
 
     return [end === results.length ? -1 : end, ...results.slice(offset, end)];
-}
-
-// https://github.com/antirez/lua-cmsgpack
-
-export function pack(this: MessagePack, ...args: any[]) {
-    return mp_pack(this, args);
-}
-
-export function unpack(this: MessagePack, msgpack: string) {
-    const results = mp_unpack_full(this, msgpack, 0, 0);
-    returns(...results.slice(1));
-}
-
-export function unpack_one(this: MessagePack, msgpack: string, offset = 0) {
-    const results = mp_unpack_full(this, msgpack, 1, offset);
-    returns(...results.slice(0, 2));
-}
-
-export function unpack_limit(
-    this: MessagePack,
-    msgpack: string,
-    limit: number,
-    offset = 0
-) {
-    const results = mp_unpack_full(this, msgpack, limit, offset);
-    returns(...results);
 }
