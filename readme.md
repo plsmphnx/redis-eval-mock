@@ -26,7 +26,9 @@ import * as mock from 'redis-mock';
 
 import mockEval from 'redis-eval-mock';
 
-spyOn(redis, 'createClient').and.callFake(() => mockEval(mock.createClient()));
+jest.spyOn(redis, 'createClient').mockImplementation(() =>
+    mockEval(mock.createClient())
+);
 ```
 
 ## Contributing

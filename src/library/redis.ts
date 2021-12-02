@@ -19,7 +19,8 @@ export function call(this: RedisClient, cmd: string, ...args: any[]) {
     // The Lua VM can only handle synchronous calls, so we need to force the
     // Redis library (which may be using process ticks to simulate actual
     // network calls) to execute syncronously
-    const result = deasync(this[cmd.toLowerCase()].bind(this))(...args);
+    const command: any = deasync(this[cmd.toLowerCase()].bind(this));
+    const result = command(...args);
     return result != null ? result : nil;
 }
 

@@ -48,7 +48,7 @@ export default function <T extends Partial<RedisClient>>(client: T): T {
                 lua.set('ARGV', args.slice(count).map(String));
 
                 cb(null, Redis.response(lua.run(script)[0]));
-            } catch (err) {
+            } catch (err: any) {
                 cb(err, null);
             }
         },
