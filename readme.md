@@ -1,6 +1,6 @@
 # redis-eval-mock
 
-[![Travis CI build status](https://travis-ci.org/plsmphnx/redis-eval-mock.svg?branch=master)](https://travis-ci.org/plsmphnx/redis-eval-mock)
+[![build status](https://github.com/plsmphnx/redis-eval-mock/workflows/build/badge.svg)](https://github.com/plsmphnx/redis-eval-mock/actions?query=workflow%3Abuild+branch%3Amaster)
 [![codecov](https://codecov.io/gh/plsmphnx/redis-eval-mock/branch/master/graph/badge.svg)](https://codecov.io/gh/plsmphnx/redis-eval-mock)
 [![npm version](https://img.shields.io/npm/v/redis-eval-mock.svg)](https://npmjs.org/package/redis-eval-mock)
 
