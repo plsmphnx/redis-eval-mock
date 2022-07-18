@@ -24,7 +24,7 @@
     "!lib/**/*.spec.*"
   ],
   "dependencies": {
-    "deasync": "^0.1.24",
+    "deasync": "^0.1.27",
     "msgpack5": "^5.3.2",
     "wasmoon": "^1.11.1"
   },
@@ -34,19 +34,18 @@
   "devDependencies": {
     "@princjef/tslint-config": "^2.0.1",
     "@types/deasync": "^0.1.2",
-    "@types/jest": "^27.0.3",
+    "@types/jest": "^27.5.2",
     "@types/msgpack5": "^3.4.2",
-    "@types/node": "^12.20.37",
+    "@types/node": "^12.20.55",
     "@types/redis": "^2.8.32",
-    "@types/redis-mock": "^0.17.0",
-    "codecov": "^3.8.3",
-    "jest": "^27.4.3",
-    "prettier": "^2.5.0",
+    "@types/redis-mock": "^0.17.1",
+    "jest": "^27.5.1",
+    "prettier": "^2.7.1",
     "pubcop": "^1.0.2",
     "redis-evalsha": "^1.1.1",
     "redis-mock": "^0.56.3",
     "tslint": "^5.20.1",
-    "typescript": "^4.5.2"
+    "typescript": "^4.7.4"
   },
   "scripts": {
     "lint": "tslint --project tsconfig.json --fix",
@@ -61,8 +60,7 @@
     "pretest:verify": "npm run build:verify",
     "test": "jest",
     "test:verify": "jest",
-    "prepublishOnly": "npm run test:verify && pubcop --checks tag branch",
-    "coverage": "codecov"
+    "prepublishOnly": "npm run test:verify && pubcop --checks tag branch"
   },
   "jest": {
     "roots": [

@@ -8,3 +8,6 @@ coverage/
 *.tgz
 *.log
 lib/
+
+# Config files
+!.github/
